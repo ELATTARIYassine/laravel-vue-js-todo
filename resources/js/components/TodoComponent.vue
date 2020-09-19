@@ -152,6 +152,25 @@ export default {
     };
   },
   methods: {
+    deleteTodo(e){
+       let data = new FormData();
+       data.append('_method', 'DELETE');
+       axios.post('/api/todo/'+e.id, data).then((res) => {
+           this.todos = res.data;
+       }).catch((error) => {
+          this.form.errors.record(error.response.data.errors);
+        });
+    },
+    updateTodo(e){
+      this.editmode = false;
+      let data = new FormData();
+      data.append('_method', 'PATCH');
+      data.append('title', e.title);
+      axios.post('/api/todo/'+e.id, data).then(() => {})
+        .catch((error) => {
+          this.form.errors.record(error.response.data.errors);
+        });
+    },
     toggleTodo(e) {
       e.completed = !e.completed;
       let data = new FormData();

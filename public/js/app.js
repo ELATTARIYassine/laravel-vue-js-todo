@@ -2061,6 +2061,28 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    deleteTodo: function deleteTodo(e) {
+      var _this = this;
+
+      var data = new FormData();
+      data.append('_method', 'DELETE');
+      axios.post('/api/todo/' + e.id, data).then(function (res) {
+        _this.todos = res.data;
+      })["catch"](function (error) {
+        _this.form.errors.record(error.response.data.errors);
+      });
+    },
+    updateTodo: function updateTodo(e) {
+      var _this2 = this;
+
+      this.editmode = false;
+      var data = new FormData();
+      data.append('_method', 'PATCH');
+      data.append('title', e.title);
+      axios.post('/api/todo/' + e.id, data).then(function () {})["catch"](function (error) {
+        _this2.form.errors.record(error.response.data.errors);
+      });
+    },
     toggleTodo: function toggleTodo(e) {
       e.completed = !e.completed;
       var data = new FormData();
@@ -2077,25 +2099,25 @@ __webpack_require__.r(__webpack_exports__);
       axios.post('/api/todo/' + e.id, data);
     },
     getTodos: function getTodos() {
-      var _this = this;
+      var _this3 = this;
 
       axios.get("/api/todo").then(function (res) {
-        _this.todos = res.data;
+        _this3.todos = res.data;
       })["catch"](function (error) {
         console.log(error);
       });
     },
     saveDate: function saveDate() {
-      var _this2 = this;
+      var _this4 = this;
 
       var data = new FormData();
       data.append("title", this.form.title);
       axios.post("/api/todo", data).then(function (res) {
-        _this2.form.reset();
+        _this4.form.reset();
 
-        _this2.getTodos();
+        _this4.getTodos();
       })["catch"](function (error) {
-        _this2.form.errors.record(error.response.data.errors);
+        _this4.form.errors.record(error.response.data.errors);
       });
     }
   },
